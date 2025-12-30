@@ -1,0 +1,122 @@
+# 阿里云 ECS GPU 开关机示例配置
+# 请将下面的占位符替换为你自己的真实信息
+
+access_key_id: $access_key_id
+access_key_secret: $access_key_secret
+region_id: "cn-shenzhen"    
+instance_id: "i-wz931cjckszqmjerwcyg"
+
+# 查询配置
+# query_all_regions: true  表示查询所有亚太中国地域（默认）
+# query_all_regions: false 表示只查询 region_id 指定的地域
+query_all_regions: false
+
+# 排除的实例ID列表（可选）- 这些实例不会出现在"可操作的ECS实例"列表中
+# 可以是单个实例ID或数组
+# 支持多种格式：带横线(i-xxx)或不带横线(iXxx)，程序会自动匹配
+excluded_instance_ids:
+  - "iZwz94gf7jfsfzqsfc1mn4Z"  # 不带横线格式
+  - "i-wz94gf7jfsfzqsfc1mn4"    # 带横线格式（如果API返回的是这种格式）
+
+# 购买实例配置（可选，仅在需要购买实例时配置）
+# 如果不配置，程序会提示错误并给出配置说明
+# 验证配置
+purchase_config:
+  # 实例型号列表（必需）- 支持多个型号，程序会并行查询并展示，用户选择序号后购买
+  instance_types:
+    - "ecs.e-c1m2.2xlarge #低端测试用的服务器,环境测试用"
+    - "ecs.c5.3xlarge  #12 vCPU,24 GiB"
+    - "ecs.gn6v-c8g1.2xlarge #机型用于低层的tts运行，费用低。"
+    - "ecs.gn6v-c8g1.4xlarge #用于人物交互"
+    - "ecs.gn6v-c8g1.8xlarge #用于高性能计算"
+  
+  # 镜像ID（可选）- 如果为空，程序会自动选择兼容的 Linux 64位镜像（大小<=40GB）
+  # image_id: "aliyun_2_1903_x64_20G_uefi_alibase_20210218.vhd"
+  
+  # 安全组ID（必需）- 请确保该安全组已存在，并有合适的出入规则，否则可能导致实例无法访问
+  security_group_id: "sg-wz9j9o62jt1b5aszv6a0"
+  
+  # 交换机ID（必需）- 验证VPC子网（交换机）是否和安全组在同一VPC层级，并确保有可用IP
+  vswitch_id: "vsw-wz94gm04er9vhpywgmodw"
+  
+  # 竞价策略（可选，默认：SpotAsPriceGo），一般可保留默认，不填则按最低价模式
+  # SpotAsPriceGo: 系统自动出价（推荐，不能设置 spot_price_limit）
+  # SpotWithPriceLimit: 设置最高价格（需要设置 spot_price_limit）
+  spot_strategy: "SpotAsPriceGo"
+
+  # 最高出价（可选，仅在 spot_strategy 为 SpotWithPriceLimit 时有效）
+  # 如果使用 SpotAsPriceGo 策略，不要设置此参数，否则会导致 InvalidSpotPriceLimit 错误
+  # spot_price_limit: 1.0
+
+  # 系统盘大小（单位：GB，建议范围30-40）- 建议验证大于配置下限
+  system_disk_size: 40
+
+  # root密码（可选），建议使用随机高强度密码，或验证密码符合阿里云规则
+  password: "QWERasdf1234"
+
+# OSS 挂载配置（可选，用于 oss_mount_auto.sh 脚本）
+oss_config:
+  # OSS Bucket 名称（必需）
+  bucket: "indextts2bucket"
+  # OSS Endpoint（必需，根据地域修改）
+  # 常见 Endpoint：
+  #   oss-cn-hangzhou.aliyuncs.com    # 华东1 杭州
+  #   oss-cn-shanghai.aliyuncs.com    # 华东2 上海
+  #   oss-cn-beijing.aliyuncs.com     # 华北2 北京
+  #   oss-cn-shenzhen.aliyuncs.com    # 华南1 深圳
+  endpoint: "oss-cn-shenzhen.aliyuncs.com"
+  # 挂载点路径（可选，默认：/mnt/oss）
+  mount_point: "/mnt/oss"
+  # 要挂载的 OSS 子路径（可选，默认挂载整个 bucket）
+  # 如果只想挂载 bucket 的根目录，留空即可
+  # 如果想挂载特定子目录，如 "data" 或 "data/subdir"，则填写该路径
+  sub_path: "indextts2bucket"
+  # AccessKey ID（可选，如果为空则使用主配置的 access_key_id）
+  # access_key_id: ""
+  # AccessKey Secret（可选，如果为空则使用主配置的 access_key_secret）
+  # access_key_secret: ""
+  # 是否使用内网 Endpoint (true/false)，默认 true
+  use_internal_endpoint: true
+  # rclone VFS / 缓存参数（可选）
+  # vfs_cache_mode: 可选值: off|minimal|writes|full（推荐 full）
+  vfs_cache_mode: "full"
+  # 最大缓存大小，支持后缀 K/M/G，如 "10G"
+  vfs_cache_max_size: "10G"
+  # 缓存最大年龄（如 "168h"）
+  vfs_cache_max_age: "168h"
+  # 读分块大小（如 "64M"）
+  vfs_read_chunk_size: "64M"
+  # 读分块大小上限（如 "512M"）
+  vfs_read_chunk_size_limit: "512M"
+  # rclone buffer 大小（如 "64M"）
+  buffer_size: "64M"
+  # 目录缓存时间（如 "72h"）
+  dir_cache_time: "72h"
+  # 日志级别（DEBUG/INFO/NOTICE/WARN/ERROR）
+  log_level: "INFO"
+
+# 云助手配置（用于 OSS 挂载自动化）
+cloud_assistant:
+  # OSS 挂载命令配置
+  oss_mount_command:
+    # 命令名称
+    name: "ecs_oss_mount"
+    # 命令超时时间（秒）
+    timeout: 18000
+    # 是否自动创建命令（如果命令不存在）
+    # 设置为 true 时，如果命令不存在会自动创建
+    # 设置为 false 时，如果命令不存在会报错，需要先手动创建
+    auto_create: true
+    # 自定义命令内容（可选，如果为空则使用默认模板）
+    # content: ""
+  
+  # 执行配置
+  execution:
+    # 执行模式：Once（执行一次）或 EveryReboot（每次重启执行）
+    repeat_mode: "Once"
+    # 是否等待执行完成
+    wait_for_completion: true
+    # 等待超时时间（秒）
+    wait_timeout: 18000
+    # 查询结果间隔（秒）
+    poll_interval: 5

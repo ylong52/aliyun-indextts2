@@ -1,0 +1,79 @@
+# Git 相关
+.git
+.gitignore
+.gitattributes
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# 虚拟环境
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 测试和文档
+tests/
+docs/
+*.md
+README*
+
+# 模型和检查点（如果不需要在镜像中）
+checkpoints/
+*.pth
+*.pt
+*.safetensors
+*.ckpt
+*.h5
+*.pb
+*.onnx
+
+# 输出目录
+outputs/
+rabbitmq_outputs/
+logs/
+uploads/
+examples/
+
+# 临时文件
+*.log
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Docker 相关
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# 压缩包
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# 其他
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.cache/
+host_packages/
+python_deps/
+python_deps_del2/
+

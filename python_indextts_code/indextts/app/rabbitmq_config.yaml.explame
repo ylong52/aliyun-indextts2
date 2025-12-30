@@ -1,0 +1,44 @@
+rabbitmq:
+  # url: amqp://guest:guest@host.docker.internal:5672/
+  queue: tts_jobs
+  prefetch_count: 1
+  done_exchange: tts_done_exchange
+  done_routing_key: tts.done
+  # 错误事件交换机（用于接收处理失败的 job 详情）
+  error_exchange: tts_error_exchange
+  error_routing_key: tts.error
+
+text:
+  local_root: data/texts
+  encoding: utf-8
+
+api:
+  base_url: https://example.com/api/text
+  timeout: 10
+
+tts:
+  model_dir: checkpoints
+  config_path: checkpoints/config.yaml
+  output_dir: rabbitmq_outputs
+  # 是否在首次成功启动时创建标记文件（用于后续自动后台运行） 
+  create_background_marker_file: false   # 设置为 false 可用于调试，禁止生成 /docker-data/.rabbitmq_worker_lock
+  max_text_tokens_per_segment: 160
+  use_fp16: false
+  use_cuda_kernel: false
+
+logging:
+  level: INFO
+
+
+
+# 自动关机配置
+auto_shutdown:
+  enable: true                    # 是否启用自动关机功能
+  idle_timeout: 180               # 队列为空且无任务时的等待时间（秒），默认3分钟
+  aliyun:
+    access_key_id: ************     # 阿里云 AccessKey ID
+    access_key_secret: ***************  # 阿里云 AccessKey Secret
+    region_id: "cn-shenzhen"      # ECS 实例所在的地域
+    instance_id: "i-wz931cjckszqmjerwcyg"  # ECS 实例 ID
+
+    
