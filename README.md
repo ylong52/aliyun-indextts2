@@ -776,6 +776,11 @@ prof.export_chrome_trace("trace.json")
 - 邮箱：stevendeve@qq.com
 
 
+### 补充
+** 由于模型文件过大，有可能漏传了一些文件。如果需要请加微信好友交流
+
+
+
 ---
 
 **最后更新**: 2025-12-30
