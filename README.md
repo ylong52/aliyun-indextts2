@@ -194,8 +194,8 @@ sequenceDiagram
 **关键配置参数**：
 ```yaml
 # 阿里云认证信息
-access_key_id: "******************"
-access_key_secret: "*******************"
+access_key_id: YOUR_ACCESS_KEY_ID
+access_key_secret: YOUR_ACCESS_KEY_SECRET
 region_id: "cn-shenzhen"
 instance_id: "i-wz931cjckszqmjerwcyg"
 
